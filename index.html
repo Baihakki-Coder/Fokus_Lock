@@ -1,362 +1,157 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FocusLock - Aplikasi Pengunci Disiplin Digital</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday ✨ Level Up</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #ffd6e8, #b388ff);
+      overflow: hidden;
+    }
+    section {
+      width: 100vw;
+      height: 100vh;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+      animation: fadeIn 1s ease;
+    }
+    section.active { display: flex; }
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    button {
+      padding: 12px 28px;
+      font-size: 16px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      color: white;
+      cursor: pointer;
+      margin: 10px;
+      box-shadow: 0 10px 20px rgba(0,0,0,.2);
+      transition: transform .3s;
+    }
+    button:hover { transform: scale(1.08); }
 
-    <style>
-        :root {
-            --primary-color: #4F46E5;
-            --primary-dark: #4338ca;
-            --secondary-color: #10B981;
-            --accent-color: #F59E0B;
-            --dark-bg: #111827;
-            --light-bg: #F9FAFB;
-            --white: #ffffff;
-            --text-main: #1F2937;
-            --text-muted: #6B7280;
-            --border-radius: 12px;
-            --container-width: 1200px;
-            --shadow: 0 4px 6px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px rgba(0,0,0,0.15);
-        }
+    /* ===== SCRAPBOOK PRO ===== */
+    .book {
+      width: 340px;
+      height: 440px;
+      background: #f5e1c8;
+      border-radius: 15px;
+      position: relative;
+      perspective: 1200px;
+      box-shadow: 0 20px 40px rgba(0,0,0,.3);
+    }
+    .cover {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #8e2de2, #4a00e0);
+      border-radius: 15px;
+      transform-origin: left;
+      transition: transform 2s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 26px;
+      letter-spacing: 1px;
+    }
+    .book.open .cover { transform: rotateY(-165deg); }
+    .page { padding: 25px; color: #333; }
+    .photo-frame { width: 130px; height: 130px; border: 3px dashed #aaa; margin: 12px auto; border-radius: 10px; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--white); color: var(--text-main); }
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-        img { max-width: 100%; }
+    .butterfly {
+      position: absolute;
+      width: 32px; height: 32px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/3/3c/Butterfly_icon.svg') no-repeat center/contain;
+      animation: fly 6s ease-out forwards;
+    }
+    @keyframes fly {
+      0% { transform: translate(0,0) scale(1); opacity:1; }
+      100% { transform: translate(300px,-700px) scale(.5); opacity:0; }
+    }
 
-        .container { max-width: var(--container-width); margin: auto; padding: 0 20px; }
-        .section-padding { padding: 80px 0; }
-        .grid { display: grid; gap: 30px; }
-        .grid-3 { grid-template-columns: repeat(3, 1fr); }
-        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    /* ===== PHOTOBOOTH CAMERA ===== */
+    video { width: 260px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,.3); }
+    canvas { display:none; }
+    .frames { display:grid; grid-template-columns: repeat(2, 120px); gap:15px; margin-top:15px; }
+    .frame { width:120px; height:120px; border:4px solid #fff; background:#eee; border-radius:12px; overflow:hidden; }
+    .frame img { width:100%; height:100%; object-fit:cover; }
 
-        h1 { font-size: 3rem; color: var(--primary-color); }
-        h2 { font-size: 2.2rem; margin-bottom: 20px; }
-        h3 { margin-bottom: 10px; }
-        p { color: var(--text-muted); }
+    /* ===== MUSIC CINEMATIC ===== */
+    .music img { width:170px; height:170px; border-radius:20px; margin-bottom:10px; box-shadow:0 15px 30px rgba(0,0,0,.4); }
 
-        .btn {
-            padding: 12px 28px;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: .3s;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: var(--primary-color);
-            color: var(--white);
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .btn-outline {
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        header {
-            position: sticky;
-            top: 0;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(8px);
-            box-shadow: 0 2px 10px rgba(0,0,0,.05);
-            z-index: 1000;
-        }
-
-        nav {
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            display: flex;
-            gap: 10px;
-        }
-
-        .logo i { color: var(--primary-color); }
-
-        .nav-links { display: flex; gap: 25px; }
-        .nav-links a:hover { color: var(--primary-color); }
-
-        .hero {
-            background: linear-gradient(135deg,#EEF2FF,#E0E7FF);
-            padding: 100px 0;
-        }
-
-        .hero-content {
-            display: flex;
-            gap: 50px;
-            align-items: center;
-        }
-
-        .hero img {
-            border-radius: 20px;
-            box-shadow: var(--shadow-lg);
-            border: 8px solid var(--white);
-        }
-
-        .badge {
-            background: #DEF7EC;
-            color: var(--secondary-color);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: .85rem;
-            font-weight: 600;
-            margin-right: 10px;
-        }
-
-        .feature-card {
-            background: var(--white);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            transition: .3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .feature-icon {
-            width: 50px;
-            height: 50px;
-            background: #EEF2FF;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            color: var(--primary-color);
-        }
-
-        .pricing-card {
-            background: var(--white);
-            padding: 40px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .pricing-card.premium {
-            border: 2px solid var(--primary-color);
-            transform: scale(1.05);
-        }
-
-        .price {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin: 20px 0;
-        }
-
-        footer {
-            background: #1F2937;
-            color: #9CA3AF;
-            padding: 60px 0 20px;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 30px;
-        }
-
-        .footer-logo {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--white);
-        }
-
-        .copyright {
-            text-align: center;
-            font-size: .9rem;
-        }
-
-        @media(max-width: 900px) {
-            .hero-content { flex-direction: column; text-align: center; }
-            .grid-3, .grid-2 { grid-template-columns: 1fr; }
-            .pricing-card.premium { transform: scale(1); }
-        }
-    </style>
+    /* ===== CREDITS CINEMA ===== */
+    .credits-wrapper { position:absolute; bottom:-100%; width:100%; }
+    .credits { color:white; font-size:20px; animation: scroll 28s linear forwards; }
+    @keyframes scroll { from { transform: translateY(100vh); } to { transform: translateY(-200vh); } }
+  </style>
 </head>
 <body>
 
-<header>
-    <div class="container">
-        <nav>
-            <a class="logo"><i class="fa-solid fa-lock"></i> FocusLock</a>
-            <ul class="nav-links">
-                <li><a href="#solusi">Solusi</a></li>
-                <li><a href="#fitur">Fitur</a></li>
-                <li><a href="#tim">Tim</a></li>
-            </ul>
-        </nav>
+<section id="page1" class="active">
+  <h2>📖 Scrapbook Spesial</h2>
+  <div class="book" id="book">
+    <div class="cover">Happy Birthday</div>
+    <div class="page">
+      <p>Hari ini adalah cerita indah tentangmu ✨</p>
+      <div class="photo-frame"></div>
+      <div class="photo-frame"></div>
     </div>
-</header>
-
-<section class="hero">
-    <div class="container hero-content">
-        <div>
-            <span class="badge">Ide Bisnis RPL</span>
-            <span class="badge">V 1.0</span>
-            <h1>Kunci Aplikasi, Buka Potensi Maksimal</h1>
-            <p>Aplikasi pengunci pintar untuk membantu fokus belajar dan bekerja tanpa distraksi.</p>
-            <br>
-            <a href="#fitur" class="btn btn-primary">Lihat Fitur</a>
-        </div>
-        <img src="https://picsum.photos/seed/focuslock/600/400">
-    </div>
+  </div>
+  <button onclick="openBook()">Buka Buku</button>
+  <button onclick="nextPage(2)">Selanjutnya</button>
 </section>
 
-<section id="solusi" class="section-padding">
-    <div class="container grid grid-2">
-        <div class="feature-card">
-            <h2 style="color:#EF4444">Masalah</h2>
-            <ul>
-                <li>Distraksi media sosial</li>
-                <li>Aplikasi pembatas mudah dimatikan</li>
-                <li>Kurang disiplin digital</li>
-            </ul>
-        </div>
-        <div class="feature-card">
-            <h2 style="color:var(--primary-color)">Solusi FocusLock</h2>
-            <ul>
-                <li>Whitelist aplikasi</li>
-                <li>Kunci aplikasi otomatis</li>
-                <li>Tidak bisa dimatikan sementara</li>
-                <li>Auto unlock setelah timer</li>
-            </ul>
-        </div>
-    </div>
+<section id="page2">
+  <h2>📸 Photobooth Kenangan</h2>
+  <video id="video" autoplay></video>
+  <canvas id="canvas" width="260" height="200"></canvas>
+  <button onclick="takePhoto()">Ambil Foto</button>
+  <div class="frames" id="frames"></div>
+  <button onclick="nextPage(3)">Selanjutnya</button>
 </section>
 
-<section id="fitur" class="section-padding" style="background:var(--light-bg)">
-    <div class="container grid grid-3">
-        <div class="feature-card">
-            <div class="feature-icon"><i class="fa-solid fa-list-check"></i></div>
-            <h3>Whitelist sistem</h3>
-            <p>Pengguna dapat memilih aplikasi mana saja yang diizinkan berjalan, selebihnya di kunci otomatis.</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon"><i class="fa-solid fa-clock"></i></div>
-            <h3>Timer Fokus</h3>
-            <p>Atur waktu fokus dari 1 jam hingga 24 jam sesuai kebutuhan disiplin Anda.</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
-            <h3>Auto unlock</h3>
-            <p>Tampilan khusus saat pengguna mencoba membuka aplikasi terlarang sebagai pengingat.</p>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
-            <h3>Proteksi Ketat</h3>
-            <p>Tidak bisa di-uninstall saat aktif.</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon"><i class="fa-solid fa-clock"></i></div>
-            <h3>Mode Fokus</h3>
-            <p>Tampilan khusus saat pengguna mencoba membuka aplikasi terlarang sebagai pengingat.</p>
-        </div>
-    </div>
+<section id="page3" class="music">
+  <h2>🎵 Lagu Untukmu</h2>
+  <img src="" alt="cover lagu">
+  <p><b>Judul Lagu</b></p>
+  <p>Semoga setiap nadanya memeluk hatimu 💖</p>
+  <audio id="song" src=""></audio>
+  <button onclick="song.play()">Play</button>
+  <button onclick="song.pause()">Pause</button>
+  <button onclick="nextPage(4)">Selanjutnya</button>
 </section>
 
-<section id="bisnis" class="section-padding">
-        <div class="container">
-            <div class="section-title">
-                <span>MODEL BISNIS</span>
-                <h2>Pilihan Paket FocusLock</h2>
-                <p>Model bisnis Freemium untuk menjangkau pengguna luas dan menghasilkan keuntungan.</p>
-            </div>
-            
-            <div class="grid grid-2" style="max-width: 900px; margin: 0 auto;">
-                <!-- Free Version -->
-                <div class="pricing-card">
-                    <h3>Versi Gratis</h3>
-                    <div class="price">Rp 0</div>
-                    <ul class="features-list">
-                        <li><i class="fa-solid fa-check"></i> Maksimal waktu fokus 3 Jam</li>
-                        <li><i class="fa-solid fa-check"></i> Fitur dasar pengunci</li>
-                        <li><i class="fa-solid fa-check"></i> Iklan ringan</li>
-                        <li class="disabled"><i class="fa-solid fa-xmark"></i> Fokus hingga 24 Jam</li>
-                        <li class="disabled"><i class="fa-solid fa-xmark"></i> Tanpa mode darurat</li>
-                    </ul>
-                    <a href="#" class="btn btn-outline">Download Gratis</a>
-                </div>
-
-                <!-- Premium Version -->
-                <div class="pricing-card premium">
-                    <div class="popular-badge">REKOMENDASI</div>
-                    <h3>Versi Premium</h3>
-                    <div class="price">Rp 10.000 <span>/bulan</span></div>
-                    <ul class="features-list">
-                        <li><i class="fa-solid fa-check"></i> Waktu fokus hingga 24 Jam</li>
-                        <li><i class="fa-solid fa-check"></i> Semua fitur aktif penuh</li>
-                        <li><i class="fa-solid fa-check"></i> Bebas Iklan</li>
-                        <li><i class="fa-solid fa-check"></i> Tanpa mode darurat (Lebih Disiplin)</li>
-                        <li><i class="fa-solid fa-check"></i> Support prioritas</li>
-                    </ul>
-                    <a href="#" class="btn btn-primary">Berlangganan Sekarang</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-<section id="tim" class="section-padding">
-    <div class="container grid grid-3">
-        <div>
-            <h3>CEO</h3>
-            <p>Manajemen & strategi</p>
-        </div>
-        <div>
-            <h3>Programmer</h3>
-            <p>Backend & frontend</p>
-        </div>
-        <div>
-            <h3>Designer</h3>
-            <p>UI/UX aplikasi</p>
-        </div>
+<section id="page4" style="background:black;">
+  <div class="credits-wrapper">
+    <div class="credits">
+      <p>🎂 Happy Birthday 🎂</p>
+      <p>Terima kasih sudah menjadi alasan senyum</p>
+      <p>Semoga semesta selalu berpihak padamu</p>
+      <p>With love ❤️</p>
     </div>
+  </div>
 </section>
 
-<footer>
-    <div class="container footer-grid">
-        <div>
-            <div class="footer-logo"><i class="fa-solid fa-lock"></i> FocusLock</div>
-            <p>Solusi disiplin digital modern.</p>
-        </div>
-        <div>
-            <h4>Navigasi</h4>
-            <ul>
-                <li>+62 838 5200 6523</li>
-                
-            </ul>
-        </div>
-        <div>
-            <h4>Kontak</h4>
-            <p>hello@focuslock.id</p>
-        </div>
-    </div>
-    <div class="copyright">
-        © 2023 FocusLock — Project RPL
-    </div>
-</footer>
+<script>
+  function nextPage(n){ document.querySelectorAll('section').forEach(s=>s.classList.remove('active')); document.getElementById('page'+n).classList.add('active'); }
+
+  function openBook(){ document.getElementById('book').classList.add('open'); for(let i=0;i<8;i++){ let b=document.createElement('div'); b.className='butterfly'; b.style.left=Math.random()*window.innerWidth+'px'; b.style.top='70%'; document.body.appendChild(b); setTimeout(()=>b.remove(),6000);} }
+
+  // CAMERA
+  const video=document.getElementById('video');
+  navigator.mediaDevices.getUserMedia({video:true}).then(stream=>video.srcObject=stream);
+  let count=0;
+  function takePhoto(){ if(count>=4) return; const canvas=document.getElementById('canvas'); const ctx=canvas.getContext('2d'); ctx.drawImage(video,0,0,260,200); const img=new Image(); img.src=canvas.toDataURL(); const frame=document.createElement('div'); frame.className='frame'; frame.appendChild(img); document.getElementById('frames').appendChild(frame); count++; }
+</script>
 
 </body>
 </html>
