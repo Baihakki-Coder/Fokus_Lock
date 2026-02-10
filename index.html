@@ -1,156 +1,298 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Happy Birthday ✨ Level Up</title>
-  <style>
-    * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body {
-      margin: 0;
-      background: radial-gradient(circle at top, #ffd6e8, #b388ff);
-      overflow: hidden;
-    }
-    section {
-      width: 100vw;
-      height: 100vh;
-      display: none;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      text-align: center;
-      padding: 20px;
-      animation: fadeIn 1s ease;
-    }
-    section.active { display: flex; }
-    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Happy Birthday ✨ Level Up</title>
 
-    button {
-      padding: 12px 28px;
-      font-size: 16px;
-      border: none;
-      border-radius: 30px;
-      background: linear-gradient(135deg, #ff758c, #ff7eb3);
-      color: white;
-      cursor: pointer;
-      margin: 10px;
-      box-shadow: 0 10px 20px rgba(0,0,0,.2);
-      transition: transform .3s;
-    }
-    button:hover { transform: scale(1.08); }
+<style>
+*{box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{
+  margin:0;
+  background:radial-gradient(circle at top,#ffd6e8,#b388ff);
+  overflow:hidden;
+}
+section{
+  width:100vw;
+  height:100vh;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+  padding:20px;
+  animation:fadeIn 1s ease;
+}
+section.active{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-    /* ===== SCRAPBOOK PRO ===== */
-    .book {
-      width: 340px;
-      height: 440px;
-      background: #f5e1c8;
-      border-radius: 15px;
-      position: relative;
-      perspective: 1200px;
-      box-shadow: 0 20px 40px rgba(0,0,0,.3);
-    }
-    .cover {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #8e2de2, #4a00e0);
-      border-radius: 15px;
-      transform-origin: left;
-      transition: transform 2s ease;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 26px;
-      letter-spacing: 1px;
-    }
-    .book.open .cover { transform: rotateY(-165deg); }
-    .page { padding: 25px; color: #333; }
-    .photo-frame { width: 130px; height: 130px; border: 3px dashed #aaa; margin: 12px auto; border-radius: 10px; }
+button{
+  padding:12px 28px;
+  font-size:16px;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(135deg,#ff758c,#ff7eb3);
+  color:white;
+  cursor:pointer;
+  margin:10px;
+  box-shadow:0 10px 20px rgba(0,0,0,.2);
+}
+button:hover{transform:scale(1.08)}
 
-    .butterfly {
-      position: absolute;
-      width: 32px; height: 32px;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/3/3c/Butterfly_icon.svg') no-repeat center/contain;
-      animation: fly 6s ease-out forwards;
-    }
-    @keyframes fly {
-      0% { transform: translate(0,0) scale(1); opacity:1; }
-      100% { transform: translate(300px,-700px) scale(.5); opacity:0; }
-    }
+/* ===== SCRAPBOOK ===== */
+.book{
+  width:340px;
+  height:440px;
+  background:#f5e1c8;
+  border-radius:15px;
+  position:relative;
+  perspective:1200px;
+  box-shadow:0 20px 40px rgba(0,0,0,.3);
+}
+.cover{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,#8e2de2,#4a00e0);
+  border-radius:15px;
+  transform-origin:left;
+  transition:transform 2s ease;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+  font-size:26px;
+}
+.book.open .cover{transform:rotateY(-165deg)}
+.page{padding:25px}
 
-    /* ===== PHOTOBOOTH CAMERA ===== */
-    video { width: 260px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,.3); }
-    canvas { display:none; }
-    .frames { display:grid; grid-template-columns: repeat(2, 120px); gap:15px; margin-top:15px; }
-    .frame { width:120px; height:120px; border:4px solid #fff; background:#eee; border-radius:12px; overflow:hidden; }
-    .frame img { width:100%; height:100%; object-fit:cover; }
+.photo-frame{
+  width:130px;
+  height:130px;
+  border:3px dashed #aaa;
+  margin:12px auto;
+  border-radius:10px;
+  overflow:hidden;
+  background:#fff;
+}
+.photo-frame img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
 
-    /* ===== MUSIC CINEMATIC ===== */
-    .music img { width:170px; height:170px; border-radius:20px; margin-bottom:10px; box-shadow:0 15px 30px rgba(0,0,0,.4); }
+/* BUTTERFLY */
+.butterfly{
+  position:absolute;
+  width:32px;height:32px;
+  background:url('https://upload.wikimedia.org/wikipedia/commons/3/3c/Butterfly_icon.svg') no-repeat center/contain;
+  animation:fly 6s forwards;
+}
+@keyframes fly{
+  0%{transform:translate(0,0)}
+  100%{transform:translate(300px,-700px);opacity:0}
+}
 
-    /* ===== CREDITS CINEMA ===== */
-    .credits-wrapper { position:absolute; bottom:-100%; width:100%; }
-    .credits { color:white; font-size:20px; animation: scroll 28s linear forwards; }
-    @keyframes scroll { from { transform: translateY(100vh); } to { transform: translateY(-200vh); } }
-  </style>
+/* ===== CALENDAR ===== */
+.calendar{
+  background:white;
+  padding:20px;
+  border-radius:20px;
+  width:300px;
+  box-shadow:0 15px 35px rgba(0,0,0,.3);
+}
+.calendar h3{margin:0;color:#ff5fa2}
+.calendar-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:8px;
+  margin-top:15px;
+}
+.day{font-weight:bold;color:#999}
+.date{
+  background:#f2f2f2;
+  padding:10px 0;
+  border-radius:50%;
+}
+.birthday{
+  background:linear-gradient(135deg,#ff758c,#ff7eb3);
+  color:white;
+  font-weight:bold;
+  box-shadow:0 0 15px rgba(255,120,180,.8);
+  position:relative;
+}
+.birthday::after{
+  content:"ITS YOUR BIRTHDAY 🎉";
+  position:absolute;
+  bottom:-34px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:12px;
+  background:#ff5fa2;
+  color:white;
+  padding:4px 10px;
+  border-radius:12px;
+  white-space:nowrap;
+}
+
+/* ===== PHOTOBOOTH ===== */
+video{
+  width:260px;
+  border-radius:15px;
+  box-shadow:0 10px 20px rgba(0,0,0,.3);
+}
+canvas{display:none}
+.frames{
+  display:grid;
+  grid-template-columns:repeat(2,120px);
+  gap:15px;
+  margin-top:15px;
+}
+.frame{
+  width:120px;
+  height:120px;
+  border:4px solid #fff;
+  border-radius:12px;
+  overflow:hidden;
+}
+.frame img{width:100%;height:100%;object-fit:cover}
+
+/* MUSIC */
+.music img{
+  width:170px;
+  height:170px;
+  border-radius:20px;
+  box-shadow:0 15px 30px rgba(0,0,0,.4);
+}
+
+/* CREDITS */
+.credits-wrapper{position:absolute;bottom:-100%;width:100%}
+.credits{
+  color:white;
+  font-size:20px;
+  animation:scroll 28s linear forwards;
+}
+@keyframes scroll{
+  from{transform:translateY(100vh)}
+  to{transform:translateY(-200vh)}
+}
+</style>
 </head>
+
 <body>
 
+<!-- PAGE 1 SCRAPBOOK -->
 <section id="page1" class="active">
-  <h2>📖 Scrapbook Spesial</h2>
-  <div class="book" id="book">
-    <div class="cover">Happy Birthday</div>
-    <div class="page">
-      <p>Hari ini adalah cerita indah tentangmu ✨</p>
-      <div class="photo-frame"></div>
-      <div class="photo-frame"></div>
-    </div>
+<h2>📖 Scrapbook Spesial</h2>
+<div class="book" id="book">
+  <div class="cover">Happy Birthday</div>
+  <div class="page">
+    <p>Hari ini adalah cerita indah tentangmu ✨</p>
+    <div class="photo-frame"><img src="i.jpg"></div>
+    <div class="photo-frame"><img src="p.jpg"></div>
   </div>
-  <button onclick="openBook()">Buka Buku</button>
-  <button onclick="nextPage(2)">Selanjutnya</button>
+</div>
+<button onclick="openBook()">Buka Buku</button>
+<button onclick="nextPage(2)">Selanjutnya</button>
 </section>
 
+<!-- PAGE 2 CALENDAR -->
 <section id="page2">
-  <h2>📸 Photobooth Kenangan</h2>
-  <video id="video" autoplay></video>
-  <canvas id="canvas" width="260" height="200"></canvas>
-  <button onclick="takePhoto()">Ambil Foto</button>
-  <div class="frames" id="frames"></div>
-  <button onclick="nextPage(3)">Selanjutnya</button>
+<h2>📅 Special Day</h2>
+<div class="calendar">
+<h3>February 2026</h3>
+<div class="calendar-grid">
+<div class="day">S</div><div class="day">M</div><div class="day">T</div>
+<div class="day">W</div><div class="day">T</div><div class="day">F</div><div class="day">S</div>
+
+<div class="date">1</div><div class="date">2</div><div class="date">3</div>
+<div class="date">4</div><div class="date">5</div><div class="date">6</div><div class="date">7</div>
+<div class="date">8</div><div class="date">9</div><div class="date birthday">10</div>
+<div class="date">11</div><div class="date">12</div><div class="date">13</div><div class="date">14</div>
+<div class="date">15</div><div class="date">16</div><div class="date">17</div>
+<div class="date">18</div><div class="date">19</div><div class="date">20</div><div class="date">21</div>
+<div class="date">22</div><div class="date">23</div><div class="date">24</div>
+<div class="date">25</div><div class="date">26</div><div class="date">27</div><div class="date">28</div>
+</div>
+</div>
+<button onclick="nextPage(3)">Selanjutnya</button>
 </section>
 
-<section id="page3" class="music">
-  <h2>🎵 Lagu Untukmu</h2>
-  <img src="" alt="cover lagu">
-  <p><b>Judul Lagu</b></p>
-  <p>Semoga setiap nadanya memeluk hatimu 💖</p>
-  <audio id="song" src=""></audio>
-  <button onclick="song.play()">Play</button>
-  <button onclick="song.pause()">Pause</button>
-  <button onclick="nextPage(4)">Selanjutnya</button>
+<!-- PAGE 3 PHOTOBOOTH -->
+<section id="page3">
+<h2>📸 Photobooth</h2>
+<video id="video" autoplay></video>
+<canvas id="canvas" width="260" height="200"></canvas>
+<button onclick="takePhoto()">Ambil Foto</button>
+<div class="frames" id="frames"></div>
+<button onclick="nextPage(4)">Selanjutnya</button>
 </section>
 
-<section id="page4" style="background:black;">
-  <div class="credits-wrapper">
-    <div class="credits">
-      <p>🎂 Happy Birthday 🎂</p>
-      <p>Terima kasih sudah menjadi alasan senyum</p>
-      <p>Semoga semesta selalu berpihak padamu</p>
-      <p>With love ❤️</p>
-    </div>
-  </div>
+<!-- PAGE 4 MUSIC -->
+<section id="page4" class="music">
+<h2>🎵 Lagu Untukmu</h2>
+<p>"YOU"</p>
+<img src="j.jpg">
+<audio id="song" src="sempurna (online-audio-converter.com).mp3"></audio>
+<button onclick="song.play()">Play</button>
+<button onclick="song.pause()">Pause</button>
+<button onclick="nextPage(5)">Selanjutnya</button>
+</section>
+
+<!-- PAGE 5 CREDITS -->
+<section id="page5" style="background:black">
+<div class="credits-wrapper">
+<div class="credits">
+<p>🎂 Happy Birthday 🎂</p>
+<p>Selamat ulang tahun, Zivanna Nauzia Syalfira ✨</p>
+<p>ITS YOUR BIRTHDAY ❤️</p><p>🎂 Happy Birthday 🎂</p> <p>Terima kasih sudah menjadi alasan senyum</p>
+ <p>Semoga semesta selalu berpihak padamu</p> <p>With love ❤️</p>
+  <p>Selamat ulang tahun, Zivanna Nauzia Syalfira 🎉✨ Semoga setiap langkah kamu selalu dipenuhi kebahagiaan ya cantik,
+     doa-doa baik yang terkabul, dan mimpi-mimpi yang perlahan menjadi nyata. Tetaplah menjadi pribadi yang lembut, kuat,
+      dan penuh cahaya seperti sekarang yap??. Semoga hari ini dan seterusnya membawa senyum, tawa, serta hal-hal indah yang 
+      pantas kamu dapatkan yang belum pernah kamu dapatkan sebelumnya saat bersama aku, maaf aku belum bisa ngasih yg lebih ya?
+       aku membuat ini sebagai bentuk rasa syukur kamu ulang tahun, dan juga permintaan maaf ya. 'btw aku membuat ini semua, sebelum putus hehe'🤍
+    SELAMAT ULANG TAHUNN YA JIPANNA dan maaf...</p>
+</div>
+</div>
 </section>
 
 <script>
-  function nextPage(n){ document.querySelectorAll('section').forEach(s=>s.classList.remove('active')); document.getElementById('page'+n).classList.add('active'); }
+function nextPage(n){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById("page"+n).classList.add("active");
+}
 
-  function openBook(){ document.getElementById('book').classList.add('open'); for(let i=0;i<8;i++){ let b=document.createElement('div'); b.className='butterfly'; b.style.left=Math.random()*window.innerWidth+'px'; b.style.top='70%'; document.body.appendChild(b); setTimeout(()=>b.remove(),6000);} }
+function openBook(){
+  document.getElementById("book").classList.add("open");
+  for(let i=0;i<8;i++){
+    let b=document.createElement("div");
+    b.className="butterfly";
+    b.style.left=Math.random()*window.innerWidth+"px";
+    b.style.top="70%";
+    document.body.appendChild(b);
+    setTimeout(()=>b.remove(),6000);
+  }
+}
 
-  // CAMERA
-  const video=document.getElementById('video');
-  navigator.mediaDevices.getUserMedia({video:true}).then(stream=>video.srcObject=stream);
-  let count=0;
-  function takePhoto(){ if(count>=4) return; const canvas=document.getElementById('canvas'); const ctx=canvas.getContext('2d'); ctx.drawImage(video,0,0,260,200); const img=new Image(); img.src=canvas.toDataURL(); const frame=document.createElement('div'); frame.className='frame'; frame.appendChild(img); document.getElementById('frames').appendChild(frame); count++; }
+/* CAMERA */
+const video=document.getElementById("video");
+navigator.mediaDevices.getUserMedia({video:true})
+.then(stream=>video.srcObject=stream);
+
+let count=0;
+function takePhoto(){
+  if(count>=4)return;
+  const canvas=document.getElementById("canvas");
+  const ctx=canvas.getContext("2d");
+  ctx.drawImage(video,0,0,260,200);
+  const img=new Image();
+  img.src=canvas.toDataURL();
+  const frame=document.createElement("div");
+  frame.className="frame";
+  frame.appendChild(img);
+  document.getElementById("frames").appendChild(frame);
+  count++;
+}
 </script>
 
 </body>
